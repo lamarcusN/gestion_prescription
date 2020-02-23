@@ -17,6 +17,9 @@ class Face(GridLayout):
     def connect(self):
         con = Connexion()
         con.connect()
+    
+    def validate(self):
+        print("Is validate")
 
 class Connexion(FloatLayout):
 
