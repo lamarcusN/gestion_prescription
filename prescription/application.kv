@@ -1,4 +1,21 @@
-<Face>:
+<MyButton@Button>:
+    background_color: (0, 0, 0, 0)
+    background_normal: ''
+    back_color: 0, 51, 255
+    border_radius: [18]
+    bold: True
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: self.border_radius
+
+
+
+<MainWondaw>:
+    name: "main"
     canvas.before:
         Color:
             rgba: 1, 1, 1, 1
@@ -7,53 +24,93 @@
             pos: root.pos
 
     # Nombre de section de l'interface principal
-    rows: 4
-    orientation: 'horizontal'
+    GridLayout:
+        rows: 4
+        orientation: 'horizontal'
+        FloatLayout:
+            Button:
+                size_hint: .18, .80
+                pos_hint:{'x': .05, 'top':.9}
+                background_normal: '/home/hunter/Documents/FACULTE/SEMESTRE-VI/ProjetAnnuel/prescription/image/sac_medical.jpg'
+                background_down: ''
 
-    FloatLayout:
-        Button:
-            size_hint: .18, .80
-            pos_hint:{'x': .05, 'top':.9}
-            background_normal: '/home/hunter/Documents/PAGE_WEB/Sécurité /sac_medical.jpg'
-            background_down: ''
+            Label:
+                text: " [color=#000000][b]Hunter-[/b]Santé[/color] "
+                pos_hint:{'x': .01, 'top':.85}
+                font_size: '30sp'
+                #size_hint: .40, .80
+                markup: True
+                #underline: True
+
+
+            MyButton:
+                pos_hint:{'x': .8, 'top':.6}
+                size_hint: .15, .25
+                text: "s'identifier"
+                text_color: 0, 51, 255, 0.2
+                #on_press: root.connect()
+
+
 
         Label:
-            text: "[color=#000000][b]Hunter-[/b]Santé[/color]"
-            pos_hint:{'x': .01, 'top':.85}
-            font_size: '30sp'
-            #size_hint: .40, .80
+            halign: 'right'
+            text: "[color=#000000][b]Hunter-[/b]Santé[/color] Pour vos préscription à la minute"
+            color: 0, 0, 0
             markup: True
-            #underline: True
 
+        FloatLayout:
+            pos: 10, 50
+            MyButton:
+                border_radius: [14]
+                pos_hint:{'x': .2, 'top':.6}
+                size_hint: .25, .35
+                text: 'Se renseigner'
+                font_size: 22
 
-        Button:
-            background_color: (0, 0, 0, 0)
-            background_normal: ''
-            back_color: 0, 51, 255
-            border_radius: [18]
-            pos_hint:{'x': .8, 'top':.6}
-            size_hint: .15, .25
-            text: "s'identifier"
-            text_color: 0, 51, 255, 0.2
-            on_press: root.connect()
-            canvas.before:
-                Color:
-                    rgb: 0, 0, 0
-                RoundedRectangle:
-                    size: self.size
-                    pos: self.pos
-                    radius: self.border_radius
+            MyButton:
+                border_radius: [12]
+                pos_hint:{'x': .6, 'top':.6}
+                size_hint: .25, .35
+                text: 'Prescrire'
+                font_size: 22
+                id: presc
+                on_press: app.root.current = "indentification"
 
+        BoxLayout:
+            Label:
+                text: "[color=#000000][b]Hunter-[/b]Santé[/color] A votre service"
+                color: 0, 0, 0
+                font_size: 24
+                markup: True
 
-
-    Label:
-        halign: 'right'
-        text: "[color=#000000][b]Hunter-[/b]Santé[/color] Pour vos préscription à la minute"
-        color: 0, 0, 0
-        markup: True
-
+<Identification>:
+    name: "indentification"
     FloatLayout:
-        pos: 10, 50
+        Label:
+            text: "Vous êtes médecin d'un hôpital ??"
+            pos_hint:{'x': .01, 'top':1.35}
+            font_size: '30sp'
+
+        Label:
+            text: "Entrez vos identifiants svp"
+            font_size: '20sp'
+            pos_hint:{'x': .01, 'top':1.25}
+        TextInput:
+            id: input
+            hint_text:'Indentifiant'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.58}
+            size_hint: 0.30, 0.07
+            multiline : False
+
+        TextInput:
+            id: input1
+            hint_text:'Mot de passe'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            size_hint: 0.30, 0.07
+            multiline : False
+            password:True
+            password_mask : "*"
+
         Button:
             background_color: (0, 0, 0, 0)
             background_normal: ''
@@ -61,11 +118,65 @@
             border_radius: [14]
 
 
-            pos_hint:{'x': .2, 'top':.6}
-            size_hint: .25, .35
-            text: 'Se renseigner'
+            pos_hint:{'x': .35, 'top':.4}
+            size_hint: .30, .09
+            text: 'Valider'
             font_size: 22
             bold: True
+
+            on_press: app.root.current = "renseignementPatient"
+
+            canvas.before:
+                Color:
+                    rgb: self.back_color
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: self.border_radius
+
+<RenseignementPatient>:
+    name: "renseignementPatient"
+
+    FloatLayout:
+        Label:
+            text: "Renseignement patient"
+            pos_hint:{'x': .01, 'top':1.35}
+            font_size: '30sp'
+
+        TextInput:
+            id: input
+            hint_text:'Rechercher le patient'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+            size_hint: 0.40, 0.07
+            multiline : False
+
+        TextInput:
+            id: input
+            hint_text:'Nom'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.47}
+            size_hint: 0.30, 0.07
+            multiline : False
+
+        TextInput:
+            id: input1
+            hint_text:'Prenom'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+            size_hint: 0.30, 0.07
+            multiline : False
+
+        Button:
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            back_color: 0.12, 30, 0.5
+            border_radius: [14]
+
+            pos_hint:{'x': .15, 'top':.2}
+            size_hint: .30, .07
+            text: 'Valider'
+            font_size: 22
+            bold: True
+
+            on_press: app.root.current = "constat"
 
             canvas.before:
                 Color:
@@ -76,19 +187,18 @@
                     radius: self.border_radius
 
         Button:
-
             background_color: (0, 0, 0, 0)
             background_normal: ''
             back_color: 0.12, 30, 0.5
-            border_radius: [12]
+            border_radius: [14]
 
-            pos_hint:{'x': .6, 'top':.6}
-            size_hint: .25, .35
-            text: 'Prescrire'
+            pos_hint:{'x': .60, 'top':.2}
+            size_hint: .30, .07
+            text: 'Ajouter patient'
             font_size: 22
             bold: True
 
-            #on_press: print("BUT {}".format(self.text))
+            on_press: app.root.current = "addPatient"
 
             canvas.before:
                 Color:
@@ -98,34 +208,47 @@
                     pos: self.pos
                     radius: self.border_radius
 
-    BoxLayout:
-        Label:
-            text: "[color=#000000][b]Hunter-[/b]Santé[/color] A votre service"
-            color: 0, 0, 0
-            font_size: 24
-            markup: True
+<AddPatient>:
+    name: "addPatient"
+    Label:
+        text: "Information sur le patient"
+        pos_hint:{'x': .01, 'top':1.35}
+        font_size: '30sp'
 
-<Connexion>:
+    TextInput:
+        id: input1
+        hint_text:'Civilité'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.7}
+        size_hint: 0.30, 0.07
+        multiline : False
 
-    FloatLayout:
-        pos : root.pos
-        TextInput:
-            id: input
-            hint_text:'Indentifiant'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.7}
-            size_hint: 0.5, 0.12
-            multiline : False
+    TextInput:
+        id: input1
+        hint_text:'Nom'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.62}
+        size_hint: 0.30, 0.07
+        multiline : False
 
-        TextInput:
-            id: input
-            hint_text:'Mot de passe'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            size_hint: 0.5, 0.12
-            multiline : False
-            password:True
-            password_mask : "*"
+    TextInput:
+        id: input1
+        hint_text:'Prenom'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.54}
+        size_hint: 0.30, 0.07
+        multiline : False
 
+    TextInput:
+        id: input1
+        hint_text:'Date de naissance'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.46}
+        size_hint: 0.30, 0.07
+        multiline : False
 
+    TextInput:
+        id: input1
+        hint_text:'maladie chronique'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.38}
+        size_hint: 0.30, 0.07
+        multiline : False
 
     Button:
         background_color: (0, 0, 0, 0)
@@ -133,14 +256,13 @@
         back_color: 0.12, 30, 0.5
         border_radius: [14]
 
-
-        pos_hint:{'x': .25, 'top':.3}
-        size_hint: .50, .15
-        text: 'Valider'
+        pos_hint:{'x': .15, 'top':.2}
+        size_hint: .30, .07
+        text: 'Retour'
         font_size: 22
         bold: True
 
-        on_press:
+        on_press: app.root.current = "renseignementPatient"
 
         canvas.before:
             Color:
@@ -149,3 +271,62 @@
                 size: self.size
                 pos: self.pos
                 radius: self.border_radius
+
+    Button:
+        background_color: (0, 0, 0, 0)
+        background_normal: ''
+        back_color: 0.12, 30, 0.5
+        border_radius: [14]
+
+        pos_hint:{'x': .60, 'top':.2}
+        size_hint: .30, .07
+        text: 'Valider'
+        font_size: 22
+        bold: True
+
+        on_press: app.root.current = "constat"
+
+        canvas.before:
+            Color:
+                rgb: self.back_color
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: self.border_radius
+
+<Constat>:
+    name: "constat"
+    Label:
+        text: "Que constatez-vous ?"
+        pos_hint:{'x': .01, 'top':1.35}
+        font_size: '30sp'
+
+    Button:
+        background_color: (0, 0, 0, 0)
+        background_normal: ''
+        back_color: 0.12, 30, 0.5
+        border_radius: [14]
+
+        pos_hint:{'x': .37, 'top':.2}
+        size_hint: .30, .07
+        text: 'Valider'
+        font_size: 22
+        bold: True
+
+        on_press: app.root.current = "maladieFind"
+
+        canvas.before:
+            Color:
+                rgb: self.back_color
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: self.border_radius
+
+<MaladieFind>:
+    name: "maladieFind"
+
+    Label:
+        text: "Tableau des maladies résultant des symptômes"
+        pos_hint:{'x': .01, 'top':1.35}
+        font_size: '30sp'
