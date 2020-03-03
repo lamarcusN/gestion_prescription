@@ -1,27 +1,27 @@
 <MyButton@Button>:
     background_color: (0, 0, 0, 0)
     background_normal: ''
-    back_color: 0, 51, 255
+    back_color: 0, 0, 0.3, 1
     border_radius: [18]
     bold: True
     canvas.before:
         Color:
-            rgb: 0, 0, 0
+            rgba: self.back_color
         RoundedRectangle:
             size: self.size
             pos: self.pos
-            radius: self.border_radius
 
+
+            radius: self.border_radius
 
 
 <MainWondaw>:
     name: "main"
     canvas.before:
-        Color:
-            rgba: 1, 1, 1, 1
         Rectangle:
             size: root.size
             pos: root.pos
+            source: '../image/fond1.jpg'
 
     # Nombre de section de l'interface principal
     GridLayout:
@@ -29,15 +29,15 @@
         orientation: 'horizontal'
         FloatLayout:
             Button:
-                size_hint: .18, .80
+                size_hint: .15, .63
                 pos_hint:{'x': .05, 'top':.9}
-                background_normal: '/home/hunter/Documents/FACULTE/SEMESTRE-VI/ProjetAnnuel/prescription/image/sac_medical.jpg'
+                background_normal: '../image/sac_medical.jpg'
                 background_down: ''
 
             Label:
-                text: " [color=#000000][b]Hunter-[/b]Santé[/color] "
-                pos_hint:{'x': .01, 'top':.85}
-                font_size: '30sp'
+                text: " [color=#000000][b]G-Prescription[/b][/color] "
+                pos_hint:{'center_x': .38, 'center_y':.53}
+                font_size: '40sp'
                 #size_hint: .40, .80
                 markup: True
                 #underline: True
@@ -51,12 +51,14 @@
                 #on_press: root.connect()
 
 
-
-        Label:
-            halign: 'right'
-            text: "[color=#000000][b]Hunter-[/b]Santé[/color] Pour vos préscription à la minute"
-            color: 0, 0, 0
-            markup: True
+        FloatLayout:
+            Label:
+                halign: 'center'
+                text: "[color=#000000][b]G-Prescription[/b][/color] Vous accompagne \npour vos préscription en toute fiabilité et sécurité"
+                color: 0, 0, 0
+                markup: True
+                pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+                font_size: '18sp'
 
         FloatLayout:
             pos: 10, 50
@@ -74,11 +76,13 @@
                 text: 'Prescrire'
                 font_size: 22
                 id: presc
-                on_press: app.root.current = "indentification"
+                on_press:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "indentification"
 
         BoxLayout:
             Label:
-                text: "[color=#000000][b]Hunter-[/b]Santé[/color] A votre service"
+                text: "[color=#000000][b]G-Prescription[/b][/color]   A votre service"
                 color: 0, 0, 0
                 font_size: 24
                 markup: True
@@ -86,15 +90,24 @@
 <Identification>:
     name: "indentification"
     FloatLayout:
+        Button:
+            size_hint: .13, .13
+            pos_hint:{'x': .05, 'top':.95}
+            background_normal: '../image/sac_medical.jpg'
+            background_down: ''
+            on_press :
+                root.manager.transition.direction = "right"
+                app.root.current = "main"
+
         Label:
             text: "Vous êtes médecin d'un hôpital ??"
-            pos_hint:{'x': .01, 'top':1.35}
+            pos_hint:{'x': .01, 'top':1.27}
             font_size: '30sp'
 
         Label:
             text: "Entrez vos identifiants svp"
             font_size: '20sp'
-            pos_hint:{'x': .01, 'top':1.25}
+            pos_hint:{'x': .01, 'top':1.20}
         TextInput:
             id: input
             hint_text:'Indentifiant'
@@ -124,7 +137,9 @@
             font_size: 22
             bold: True
 
-            on_press: app.root.current = "renseignementPatient"
+            on_press:
+                root.manager.transition.direction = "left"
+                app.root.current = "renseignementPatient"
 
             canvas.before:
                 Color:
@@ -198,7 +213,9 @@
             font_size: 22
             bold: True
 
-            on_press: app.root.current = "addPatient"
+            on_press:
+                root.manager.transition.direction = "left"
+                app.root.current = "addPatient"
 
             canvas.before:
                 Color:
@@ -262,7 +279,9 @@
         font_size: 22
         bold: True
 
-        on_press: app.root.current = "renseignementPatient"
+        on_press:
+            root.manager.transition.direction = "right"
+            app.root.current = "renseignementPatient"
 
         canvas.before:
             Color:
@@ -284,7 +303,9 @@
         font_size: 22
         bold: True
 
-        on_press: app.root.current = "constat"
+        on_press:
+            root.manager.transition.direction = "left"
+            app.root.current = "constat"
 
         canvas.before:
             Color:
@@ -313,7 +334,9 @@
         font_size: 22
         bold: True
 
-        on_press: app.root.current = "maladieFind"
+        on_press:
+            root.manager.transition.direction = "left"
+            app.root.current = "maladieFind"
 
         canvas.before:
             Color:
