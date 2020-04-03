@@ -14,13 +14,24 @@
             radius: self.border_radius
 
 
+<SelectableLabel>:
+    # Draw a background to indicate selection
+    canvas.before:
+        Color:
+            rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+
 <MainWondaw>:
     name: "main"
     canvas.before:
         Rectangle:
             size: root.size
             pos: root.pos
-            source: '../image/fond2.jpg'
+            source: '../image/fond4_bis1.png'
 
     # Nombre de section de l'interface principal
     GridLayout:
@@ -30,7 +41,7 @@
             Button:
                 size_hint: .15, .63
                 pos_hint:{'x': .05, 'top':.9}
-                background_normal: '../image/sac_medical.jpg'
+                background_normal: '../image/plus.jpg'
                 background_down: ''
 
             Label:
@@ -67,6 +78,10 @@
                 pos_hint:{'x': .2, 'top':.6}
                 size_hint: .25, .35
                 text: 'Se renseigner'
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.transition.duration = 0.01
+                    app.root.current = "renseignement"
 
             MyButton:
                 border_radius: [12]
@@ -76,6 +91,7 @@
                 id: presc
                 on_press:
                     root.manager.transition.direction = "left"
+                    root.manager.transition.duration = 0.01
                     app.root.current = "indentification"
 
         BoxLayout:
@@ -87,16 +103,19 @@
 
 <Identification>:
     name: "indentification"
+
+    ident : ident
+    passwd : passwd
     canvas.before:
         Rectangle:
             size: root.size
             pos: root.pos
-            source: '../image/fond.jpg'
+            source: '../image/fond4_bis1.png'
     FloatLayout:
         Button:
             size_hint: .13, .13
             pos_hint:{'x': .05, 'top':.95}
-            background_normal: '../image/sac_medical.jpg'
+            background_normal: '../image/plus.jpg'
             background_down: ''
             on_press :
                 root.manager.transition.direction = "right"
@@ -116,14 +135,14 @@
             font_size: '20sp'
             pos_hint:{'x': .01, 'top':1.20}
         TextInput:
-            id: input
+            id: ident
             hint_text:'Indentifiant'
             pos_hint: {'center_x': 0.5, 'center_y': 0.58}
             size_hint: 0.30, 0.07
             multiline : False
 
         TextInput:
-            id: input1
+            id: passwd
             hint_text:'Mot de passe'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: 0.30, 0.07
@@ -139,27 +158,216 @@
 
             on_press:
                 root.manager.transition.direction = "left"
+                root.checkLogin()
+                app.root.current = "recherchePatient"
+
+<Renseignement>:
+    name: "renseignement"
+
+    canvas.before:
+        Rectangle:
+            size: root.size
+            pos: root.pos
+            source: '../image/fond4_bis1.png'
+
+    FloatLayout:
+        Button:
+            size_hint: .13, .13
+            pos_hint:{'x': .05, 'top':.95}
+            background_normal: '../image/plus.jpg'
+            background_down: ''
+            on_press :
+                root.manager.transition.direction = "right"
+                app.root.current = "main"
+
+        MyButton:
+            pos_hint:{'x': .08, 'top':.5}
+            size_hint: .25, .07
+            text: 'Voir un patient'
+            on_press:
+                root.manager.transition.direction = "left"
                 app.root.current = "renseignementPatient"
 
+        MyButton:
+            pos_hint:{'x': .38, 'top':.5}
+            size_hint: .25, .07
+            text: 'Voir un medecin'
+            on_press:
+                root.manager.transition.direction = "left"
+                app.root.current = "renseignementMaladie"
+
+        MyButton:
+            pos_hint:{'x': .68, 'top':.5}
+            size_hint: .25, .07
+            text: 'Voir une maladie'
+            on_press:
+                root.manager.transition.direction = "left"
+                app.root.current = "renseignementMadicament"
+
+# SECTION RENSEIGNEMENT
 
 <RenseignementPatient>:
+
     name: "renseignementPatient"
     canvas.before:
         Rectangle:
             size: root.size
             pos: root.pos
-            source: '../image/fond.jpg'
+            source: '../image/fond4_bis1.png'
+
     FloatLayout:
         Button:
             size_hint: .13, .13
             pos_hint:{'x': .05, 'top':.95}
-            background_normal: '../image/sac_medical.jpg'
+            background_normal: '../image/plus.jpg'
+            background_down: ''
+            on_press :
+                root.manager.transition.direction = "right"
+                app.root.current = "main"
+
+        Label:
+            text: "[color=#000000][b]Recherche patient[/b][/color]"
+            color: 0, 0, 0
+            markup: True
+            pos_hint:{'x': .01, 'center_y':0.77}
+            font_size: '30sp'
+
+        TextInput:
+            id: input
+            hint_text:'Renseignement sur un patient'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.63}
+            size_hint: 0.40, 0.07
+            multiline : False
+            write_tab: False
+            on_text:
+                rv.update_Data(self.text)
+        RV:
+            id: rv
+            pos_hint: {'center_x': .8, 'center_y': 0.91}
+            viewclass: 'SelectableLabel'
+            SelectableBoxLayout:
+                default_size: None, dp(30)
+                default_size_hint: .4, None
+                orientation: 'vertical'
+                multiselect: False
+                touch_multiselect: True
+
+
+<RenseignementMaladie>:
+
+    name: "renseignementMaladie"
+    canvas.before:
+        Rectangle:
+            size: root.size
+            pos: root.pos
+            source: '../image/fond4_bis1.png'
+
+    FloatLayout:
+        Button:
+            size_hint: .13, .13
+            pos_hint:{'x': .05, 'top':.95}
+            background_normal: '../image/plus.jpg'
+            background_down: ''
+            on_press :
+                root.manager.transition.direction = "right"
+                app.root.current = "main"
+
+        Label:
+            text: "[color=#000000][b]Renseignement Maladie[/b][/color]"
+            color: 0, 0, 0
+            markup: True
+            pos_hint:{'x': .01, 'center_y':0.77}
+            font_size: '30sp'
+
+        TextInput:
+            id: input
+            hint_text:'Renseignement sur un patient'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.63}
+            size_hint: 0.40, 0.07
+            multiline : False
+            write_tab: False
+            on_text:
+                rv.update_Data(self.text)
+        RV:
+            id: rv
+            pos_hint: {'center_x': .8, 'center_y': 0.91}
+            viewclass: 'SelectableLabel'
+            SelectableBoxLayout:
+                default_size: None, dp(30)
+                default_size_hint: .4, None
+                orientation: 'vertical'
+                multiselect: False
+                touch_multiselect: True
+
+
+<RenseignementMadicament>:
+
+    name: "renseignementMadicament"
+    canvas.before:
+        Rectangle:
+            size: root.size
+            pos: root.pos
+            source: '../image/fond4_bis1.png'
+
+    FloatLayout:
+        Button:
+            size_hint: .13, .13
+            pos_hint:{'x': .05, 'top':.95}
+            background_normal: '../image/plus.jpg'
+            background_down: ''
+            on_press :
+                root.manager.transition.direction = "right"
+                app.root.current = "main"
+
+        Label:
+            text: "[color=#000000][b]Renseignement Maladie[/b][/color]"
+            color: 0, 0, 0
+            markup: True
+            pos_hint:{'x': .01, 'center_y':0.77}
+            font_size: '30sp'
+
+        TextInput:
+            id: input
+            hint_text:'Renseignement sur un patient'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.63}
+            size_hint: 0.40, 0.07
+            multiline : False
+            write_tab: False
+            on_text:
+                rv.update_Data(self.text)
+        RV:
+            id: rv
+            pos_hint: {'center_x': .8, 'center_y': 0.91}
+            viewclass: 'SelectableLabel'
+            SelectableBoxLayout:
+                default_size: None, dp(30)
+                default_size_hint: .4, None
+                orientation: 'vertical'
+                multiselect: False
+                touch_multiselect: True
+
+
+
+
+
+<RecherchePatient>:
+    name: "recherchePatient"
+    canvas.before:
+        Rectangle:
+            size: root.size
+            pos: root.pos
+            source: '../image/fond4_bis1.png'
+    FloatLayout:
+        Button:
+            size_hint: .13, .13
+            pos_hint:{'x': .05, 'top':.95}
+            background_normal: '../image/plus.jpg'
             background_down: ''
             on_press :
                 root.manager.transition.direction = "right"
                 app.root.current = "main"
         Label:
-            text: "[color=#000000][b]Renseignement patient[/b][/color]"
+            text: "[color=#000000][b]Recherche patient[/b][/color]"
             color: 0, 0, 0
             markup: True
             pos_hint:{'x': .01, 'center_y':0.77}
@@ -168,21 +376,36 @@
         TextInput:
             id: input
             hint_text:'Rechercher le patient'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.63}
+            pos_hint: {'center_x': 0.7, 'center_y': 0.63}
             size_hint: 0.40, 0.07
             multiline : False
+            write_tab: False
+            on_text:
+                rv.update_Data(self.text)
+        RV:
+            id: rv
+            pos_hint: {'center_x': 1., 'center_y': 0.9}
+            viewclass: 'SelectableLabel'
+            SelectableBoxLayout:
+                default_size: None, dp(30)
+                default_size_hint: .4, None
+                orientation: 'vertical'
+                multiselect: False
+                touch_multiselect: True
 
         TextInput:
             id: input
             hint_text:'Nom'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.46}
+            write_tab: False
+            pos_hint: {'center_x': 0.2, 'center_y': 0.63}
             size_hint: 0.30, 0.07
             multiline : False
 
         TextInput:
             id: input1
             hint_text:'Prenom'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.38}
+            write_tab: False
+            pos_hint: {'center_x': 0.2, 'center_y': 0.55}
             size_hint: 0.30, 0.07
             multiline : False
 
@@ -277,11 +500,11 @@
         Rectangle:
             size: root.size
             pos: root.pos
-            source: '../image/fond4.jpg'
+            source: '../image/fond4_bis1.png'
     Button:
         size_hint: .13, .13
         pos_hint:{'center_x': .87, 'top':.95}
-        background_normal: '../image/sac_medical.jpg'
+        background_normal: '../image/plus.jpg'
         background_down: ''
         on_press :
             root.manager.transition.direction = "right"
@@ -313,7 +536,7 @@
     Button:
         size_hint: .13, .13
         pos_hint:{'center_x': .93, 'top':.97}
-        background_normal: '../image/sac_medical.jpg'
+        background_normal: '../image/plus.jpg'
         background_down: ''
         on_press :
             root.manager.transition.direction = "right"
@@ -325,3 +548,36 @@
         markup: True
         pos_hint:{'x': .01, 'top':1.35}
         font_size: '30sp'
+
+    MyButton:
+        pos_hint:{'center_x': .5, 'top':.2}
+        size_hint: .30, .07
+        text: 'Valider'
+        bold: True
+
+        on_press: app.root.current = "recapVisite"
+
+<RecapVisite>:
+    name: "recapVisite"
+
+    canvas.before:
+        Rectangle:
+            size: root.size
+            pos: root.pos
+            source: '../image/fond5.jpg'
+    Button:
+        size_hint: .13, .13
+        pos_hint:{'center_x': .93, 'top':.97}
+        background_normal: '../image/plus.jpg'
+        background_down: ''
+        on_press :
+            root.manager.transition.direction = "right"
+            app.root.current = "main"
+    Label:
+        halign: "center"
+        text: "[color=#000000][b]Récapitulatif de la visite[/b][/color]"
+        color: 0, 0, 0
+        markup: True
+        pos_hint:{'x': .01, 'top':1.35}
+        font_size: '30sp'
+
