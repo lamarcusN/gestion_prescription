@@ -9,10 +9,12 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
+from kivy.properties import StringProperty
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.properties import BooleanProperty
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
@@ -21,11 +23,13 @@ from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from entity.MedecinEntity import MedecinEntity
 from entity.LoginEntity import LoginEntity
 from acces_donnees.LoginDAO import LoginDAO
+from kivy.uix.checkbox import CheckBox
 import hashlib
 from kivy.core.window import Window
 
-Window.size = (850, 650)
+Window.size = (850, 640)
 
+kv = Builder.load_file("application.kv")
 
 # MainWondaw : Classe principale de l'application.
 # Définit les fonctionnalités de la fenêtre principale de l'application
@@ -80,7 +84,13 @@ class Renseignement(Screen):
     pass
 
 class RecherchePatient(Screen):
-    pass
+    enabled = BooleanProperty(True)
+    recherche_patient = ObjectProperty(None)
+    patient = None
+
+    #def setName_Patient(text):
+        #RecherchePatient.patient.text = text
+        #RecherchePatient.patient.parent.parent.parent.ids['valide_name_patient'].set_disabled(False)
 
 # Gère l'ajoute un patient dans la base de données.
 class AddPatient(Screen):
@@ -91,7 +101,7 @@ class Constat(Screen):
     pass
 
 # Renseignement sur un médecin
-class RenseignementMadicament(Screen):
+class RenseignementMedicament(Screen):
     pass
 
 # Renseignement sur une maladie
@@ -116,65 +126,6 @@ class WindowManager(ScreenManager):
 ## FIN DE LA SECTION ##########
 
 
-
-
-
-
-# Listviewer
-
-class SelectableBoxLayout(FocusBehavior, LayoutSelectionBehavior,
-                                 RecycleBoxLayout):
-    ''' Adds selection and focus behaviour to the view. '''
-
-class RV(RecycleView):
-    def __init__(self, **kwargs):
-        super(RV, self).__init__(**kwargs)
-        # l = ["Marc", "Henri", "Ning", "William"]
-        self.data = []
-
-    def update_Data(self, text):
-        if len(text) != 0 and len(text) < 2:
-            print(text, "HERE")
-            self.data = [{'text': str(x)}
-                         for x in ["Stark", "Vision", "Thor", "Hunter"]]
-        elif len(text) >= 2:
-            print(text, "GOAL")
-            self.data = [{'text': str(x)}
-                         for x in ["Panther", "Wonda", "Focon", "Furry"]]
-        elif len(text) == 0:
-            self.data = []
-
-
-class SelectableLabel(RecycleDataViewBehavior, Label):
-    ''' Add selection support to the Label '''
-    index = None
-    selected = BooleanProperty(False)
-    selectable = BooleanProperty(True)
-
-    def update_Data(self):
-        print("Nous y sommes")
-
-    def refresh_view_attrs(self, rv, index, data):
-        ''' Catch and handle the view changes '''
-        self.index = index
-        return super(SelectableLabel, self).refresh_view_attrs(
-            rv, index, data)
-
-    def on_touch_down(self, touch):
-        ''' Add selection on touch down '''
-
-        if super(SelectableLabel, self).on_touch_down(touch):
-            return True
-        if self.collide_point(*touch.pos) and self.selectable:
-            return self.parent.select_with_touch(self.index, touch)
-
-    def apply_selection(self, rv, index, is_selected):
-        ''' Respond to the selection of items in the view. '''
-
-        self.selected = is_selected
-
-kv = Builder.load_file("application.kv")
-
 sm = WindowManager()
 
 sm.add_widget(MainWondaw(name="main"))
@@ -182,7 +133,7 @@ sm.add_widget(Identification(name="indentification"))
 sm.add_widget(RecherchePatient(name="recherchePatient"))
 sm.add_widget(Renseignement(name="renseignement"))
 sm.add_widget(AddPatient(name="addPatient"))
-sm.add_widget(RenseignementMadicament(name="renseignementMadicament"))
+sm.add_widget(RenseignementMedicament(name="renseignementMedicament"))
 sm.add_widget(RenseignementMaladie(name="renseignementMaladie"))
 sm.add_widget(RenseignementPatient(name="renseignementPatient"))
 sm.add_widget(Constat(name="constat"))
